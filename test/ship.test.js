@@ -1,8 +1,9 @@
 const { expect } = require('chai');
 
 describe('checkForShip()', () => {
-	const checkForShip = require('../battleship_engine/game_logic/ship_methods')
-		.checkForShip;
+	const {
+		checkForShip,
+	} = require('../battleship_engine/game_logic/ship_methods').shipMethods;
 
 	it('should correctly report no ship at a given coordinate', () => {
 		player = {
@@ -75,3 +76,24 @@ describe('checkForShip()', () => {
 		expect(checkForShip(player, [9, 9])).to.be.false;
 	});
 });
+
+describe('damageShip()', () => {
+	const {
+		damageShip,
+	} = require('../battleship_engine/game_logic/ship_methods').shipMethods;
+
+	it('should register damage on a given ship at a given location', () => {
+		const ship = {
+			locations: [[0, 0]],
+			damage: [],
+		};
+		damageShip(ship, [0, 0]);
+		expect(ship.damage).to.not.be.empty;
+		expect(ship.damage[0]).to.deep.equal([0, 0]);
+	});
+});
+
+/*  write new suite for when a player fires on an opponent.
+    it should use checkForShip() to see if given coordinates are accurate
+    and if they are, use damageShip() to deal damage.
+*/
