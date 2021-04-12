@@ -3,7 +3,7 @@ const { expect } = require('chai');
 describe('checkForShip()', () => {
 	const {
 		checkForShip,
-	} = require('../battleship_engine/game_logic/ship_methods').shipMethods;
+	} = require('../battleship_engine/game_logic/ship_methods');
 
 	it('should correctly report no ship at a given coordinate', () => {
 		player = {
@@ -24,7 +24,7 @@ describe('checkForShip()', () => {
 				},
 			],
 		};
-		expect(checkForShip(player, [0, 0])).to.be.true;
+		expect(checkForShip(player, [0, 0])).to.deep.equal(player.ships[0]);
 	});
 
 	it('should handle ships located at more than one coordinate', () => {
@@ -38,8 +38,8 @@ describe('checkForShip()', () => {
 				},
 			],
 		};
-		expect(checkForShip(player, [0, 1])).to.be.true;
-		expect(checkForShip(player, [0, 0])).to.be.true;
+		expect(checkForShip(player, [0, 1])).to.deep.equal(player.ships[0]);
+		expect(checkForShip(player, [0, 0])).to.deep.equal(player.ships[0]);
 		expect(checkForShip(player, [9, 9])).to.be.false;
 	});
 
@@ -68,11 +68,11 @@ describe('checkForShip()', () => {
 				},
 			],
 		};
-		expect(checkForShip(player, [0, 1])).to.be.true;
-		expect(checkForShip(player, [0, 0])).to.be.true;
-		expect(checkForShip(player, [1, 0])).to.be.true;
-		expect(checkForShip(player, [1, 1])).to.be.true;
-		expect(checkForShip(player, [2, 3])).to.be.true;
+		expect(checkForShip(player, [0, 1])).to.deep.equal(player.ships[0]);
+		expect(checkForShip(player, [0, 0])).to.deep.equal(player.ships[0]);
+		expect(checkForShip(player, [1, 0])).to.deep.equal(player.ships[1]);
+		expect(checkForShip(player, [1, 1])).to.deep.equal(player.ships[1]);
+		expect(checkForShip(player, [2, 3])).to.deep.equal(player.ships[2]);
 		expect(checkForShip(player, [9, 9])).to.be.false;
 	});
 });
@@ -80,7 +80,7 @@ describe('checkForShip()', () => {
 describe('damageShip()', () => {
 	const {
 		damageShip,
-	} = require('../battleship_engine/game_logic/ship_methods').shipMethods;
+	} = require('../battleship_engine/game_logic/ship_methods');
 
 	it('should register damage on a given ship at a given location', () => {
 		const ship = {
@@ -97,3 +97,32 @@ describe('damageShip()', () => {
     it should use checkForShip() to see if given coordinates are accurate
     and if they are, use damageShip() to deal damage.
 */
+describe('fire()', () => {
+	const { fire } = require('../battleship_engine/game_logic/ship_methods');
+
+	it('should record damage on the given player ship at the given coordinates', () => {
+		const player = {
+			ships: [
+				{
+					locations: [[0, 0]],
+					damage: [],
+				},
+			],
+		};
+		fire(player, [0, 0]);
+		expect(player.ships[0].damage[0]).to.deep.equal([0, 0]);
+	});
+
+	it('should not record damage if there is no ship at the given coordinates', () => {
+		const player = {
+			ships: [
+				{
+					locations: [[0, 0]],
+					damage: [],
+				},
+			],
+		};
+		fire(player, [9, 9]);
+		expect(player.ships[0].damage).to.be.empty;
+	});
+});
